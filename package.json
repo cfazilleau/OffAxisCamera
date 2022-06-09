@@ -1,0 +1,11 @@
+{
+  "name": "dev.cfaz.offaxiscamera",
+  "displayName": "OffAxisCamera",
+  "version": "0.0.1",
+  "author": {
+    "name": "Clement Fazilleau",
+    "email": "contact@cfaz.dev",
+    "url": "http://cfaz.dev/"
+  },
+  "description": "Lightweight and simple off-axis camera package"
+}
