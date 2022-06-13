@@ -1,0 +1,14 @@
+{
+    "name": "cfaz.offaxiscamera.runtime",
+    "rootNamespace": "CFaz.OffAxisCamera",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

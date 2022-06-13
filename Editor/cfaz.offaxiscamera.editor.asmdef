@@ -1,0 +1,16 @@
+{
+    "name": "cfaz.offaxiscamera.editor",
+    "rootNamespace": "CFaz.OffAxisCamera",
+    "references": [
+        "GUID:ca1ac4ba96d19844aaa57654ffdd4f54"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
