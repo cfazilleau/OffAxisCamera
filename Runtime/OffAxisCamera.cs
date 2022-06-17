@@ -13,7 +13,6 @@ namespace CFaz.OffAxisCamera
 	[RequireComponent(typeof(Camera))]
 	public class OffAxisCamera : MonoBehaviour
 	{
-
 		#region Serialized Variables
 
 		[SerializeField]

@@ -5,6 +5,8 @@ namespace CFaz.OffAxisCamera.Editor
 	[CustomEditor(typeof(OffAxisCamera))]
 	public class OffAxisCameraEditor : UnityEditor.Editor
 	{
+		private OffAxisCamera CameraTarget => (OffAxisCamera)target;
+
 		public override void OnInspectorGUI()
 		{
 			EditorGUI.BeginChangeCheck();
@@ -12,20 +14,18 @@ namespace CFaz.OffAxisCamera.Editor
 			SerializedProperty iterator = serializedObject.GetIterator();
 			iterator.NextVisible(true);
 
-			bool showPlaneSettings = false;
-
+			// Draw properties
 			do
 			{
-				if (iterator.propertyPath == "m_Script")
-					continue;
-
-				if (iterator.propertyPath == "snapToTransform")
-					showPlaneSettings = iterator.objectReferenceValue == null;
-
-				if (!showPlaneSettings &&
-				    (iterator.propertyPath == "planeDistance" ||
-				     iterator.propertyPath == "planeRotation"))
-					continue;
+				switch (iterator.propertyPath)
+				{
+					case "m_Script":
+						continue;
+					case "planeDistance":
+					case "planeRotation":
+						if (CameraTarget.SnapToTransform != null) continue;
+						break;
+				}
 
 				EditorGUILayout.PropertyField(iterator, true);
 			}
