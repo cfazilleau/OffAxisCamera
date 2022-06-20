@@ -23,6 +23,31 @@ The custom tool also allows to edit the projection plane size and camera POV pos
 - Click the "+" button, then choose "Add package from git URL..."
 - Add "https://github.com/cfazilleau/OffAxisCamera" to the text field and press enter or click "Add".
 
+# Properties
+
+The accessible Properties of the OffAxisCamera component are the following:
+
+```cs
+/// Camera attached to this component, available after Awake().
+public Camera Camera;
+
+/// Size of the projection plane.
+public Vector2 PlaneSize
+
+/// Point of view plane rect in local coordinates, centered on the camera position.
+/// Setting this will add the new rect center value to the camera position.
+public Rect PlaneRect
+
+/// Clamp near plane of the attached camera to the projection plane.
+public bool UseProjectionAsNearPlane
+
+/// Point Of View of the camera in world coordinates.
+public Vector3 PointOfView
+
+/// Point Of View of the camera in local coordinates.
+public Vector3 PointOfViewLocal
+```
+
 ----
 
 ![Unity_nINzpL8jpu](https://user-images.githubusercontent.com/35767293/174666001-e6cd3cba-750f-4715-be78-d9a717603b62.gif)
