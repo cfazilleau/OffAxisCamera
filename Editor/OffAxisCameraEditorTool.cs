@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace CFaz.OffAxisCamera.Editor
 {
-	[EditorTool("Point of view tool", typeof(PointOfViewCamera))]
-	public class PointOfViewEditorTool : EditorTool
+	[EditorTool("Off axis camera tool", typeof(OffAxisCamera))]
+	public class OffAxisCameraEditorTool : EditorTool
 	{
-		private PointOfViewCamera CameraTarget => (PointOfViewCamera)target;
+		private OffAxisCamera CameraTarget => (OffAxisCamera)target;
 
 		private readonly int[] _handleIds =
 		{
