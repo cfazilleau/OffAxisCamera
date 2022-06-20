@@ -59,6 +59,10 @@ namespace CFaz.OffAxisCamera.Editor
 			Handles.DrawDottedLine(povWorld, tl, 1);
 			Handles.DrawDottedLine(povWorld, br, 1);
 			Handles.DrawDottedLine(povWorld, bl, 1);
+
+			// Draws a small sphere for the camera POV
+			Handles.color = Color.white;
+			Handles.SphereHandleCap(0, povWorld, Quaternion.identity, 0.2f, EventType.Repaint);
 		}
 	}
 }
