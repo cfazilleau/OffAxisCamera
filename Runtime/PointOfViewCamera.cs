@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 namespace CFaz.OffAxisCamera
@@ -21,7 +20,7 @@ namespace CFaz.OffAxisCamera
 
 		[SerializeField]
 		[Tooltip("Point Of View of the camera in local coordinates.")]
-		private Vector3 cameraPOV = Vector3.back;
+		private Vector3 cameraPovLocal = Vector3.back;
 
 		[SerializeField]
 		[Tooltip("Clamp near plane of the attached camera to the projection plane.")]
@@ -41,7 +40,6 @@ namespace CFaz.OffAxisCamera
 		private Vector3 _botLeft;
 		private Vector3 _botRight;
 		private Vector3 _topLeft;
-		private Vector3 _topRight;
 
 		// Projection plane Right, Up, and Backward vectors
 		private Vector3 _planeRight;
@@ -100,8 +98,8 @@ namespace CFaz.OffAxisCamera
 		/// </summary>
 		public Vector3 PointOfView
 		{
-			get => transform.TransformPoint(cameraPOV);
-			set => cameraPOV = transform.InverseTransformPoint(value);
+			get => transform.TransformPoint(cameraPovLocal);
+			set => cameraPovLocal = transform.InverseTransformPoint(value);
 		}
 
 		/// <summary>
@@ -109,8 +107,8 @@ namespace CFaz.OffAxisCamera
 		/// </summary>
 		public Vector3 PointOfViewLocal
 		{
-			get => cameraPOV;
-			set => cameraPOV = value;
+			get => cameraPovLocal;
+			set => cameraPovLocal = value;
 		}
 
 		#endregion
@@ -130,25 +128,26 @@ namespace CFaz.OffAxisCamera
 
 			Vector3 povWorld = PointOfView;
 			Vector3 forward = tr.forward;
+
+			// invert coordinates if the camera is behind the projection plane
 			float invert = -Mathf.Sign(Vector3.Dot(forward, povWorld - tr.position));
 
+			// We only need 3 points to identify the projection plane
 			_botLeft  = tr.TransformPoint(new Vector3(invert * -_halfSize.x, -_halfSize.y));
 			_botRight = tr.TransformPoint(new Vector3(invert * _halfSize.x, -_halfSize.y));
 			_topLeft  = tr.TransformPoint(new Vector3(invert * -_halfSize.x, _halfSize.y));
-			_topRight = tr.TransformPoint(new Vector3(invert * _halfSize.x, _halfSize.y));
 
 			_planeRight   = invert * tr.right;
 			_planeUp      = invert * tr.up;
 			_planeForward = invert * forward;
 
 			// #### Calculate Matrices
-			// We only need 3 points to identify a plane (quad)
 			Vector3 localBotLeft  = _botLeft - povWorld;
 			Vector3 localBotRight = _botRight - povWorld;
 			Vector3 localTopLeft  = _topLeft - povWorld;
 
 			// Projection plane distance from the camera
-			float cameraDistance = Mathf.Abs(PointOfViewLocal.z);
+			float cameraDistance = -PointOfViewLocal.z * invert;
 
 			// Clamp near camera plane to projection plane
 			if (clampNearPlane)

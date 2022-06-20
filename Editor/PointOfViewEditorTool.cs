@@ -43,11 +43,12 @@ namespace CFaz.OffAxisCamera.Editor
 				Undo.RecordObject(CameraTarget, "Change Point Of View Position");
 				CameraTarget.PointOfView = newPosition;
 				EditorUtility.SetDirty(CameraTarget);
+				return;
 			}
 
 			// Camera plane dimensions handles
-			EditorGUI.BeginChangeCheck();
 			Handles.color = Color.white;
+			EditorGUI.BeginChangeCheck();
 
 			// New handle Position (local)
 			Vector3 up = transform.up;
@@ -60,29 +61,27 @@ namespace CFaz.OffAxisCamera.Editor
 			// If dimensions changed
 			if (EditorGUI.EndChangeCheck())
 			{
-				if (Event.current.alt || Event.current.shift)
+				// If alt is pressed, resize all handles relative to the aspect ratio
+				if (Event.current.alt)
 				{
 					float vertOffset = upOffset - downOffset;
 					float horOffset = rightOffset - leftOffset;
+					float ratio = rect.width / rect.height;
 
-					// If alt is pressed, resize all handles relative to the aspect ratio
-					if (Event.current.alt)
-					{
-						float ratio = rect.width / rect.height;
-
-						upOffset = vertOffset + horOffset / ratio;
-						downOffset = -vertOffset - horOffset / ratio;
-						rightOffset = horOffset + vertOffset * ratio;
-						leftOffset = -horOffset - vertOffset * ratio;
-					}
-					// If shift is pressed, resize opposite handle as well
-					else
-					{
-						upOffset = vertOffset;
-						downOffset = -vertOffset;
-						rightOffset = horOffset;
-						leftOffset = -horOffset;
-					}
+					upOffset = vertOffset + horOffset / ratio;
+					downOffset = -vertOffset - horOffset / ratio;
+					rightOffset = horOffset + vertOffset * ratio;
+					leftOffset = -horOffset - vertOffset * ratio;
+				}
+				// If shift is pressed, resize opposite handle as well
+				else
+				{
+					float vertOffset = upOffset - downOffset;
+					float horOffset = rightOffset - leftOffset;
+					upOffset = vertOffset;
+					downOffset = -vertOffset;
+					rightOffset = horOffset;
+					leftOffset = -horOffset;
 				}
 
 				// Set new plane rect
@@ -97,6 +96,7 @@ namespace CFaz.OffAxisCamera.Editor
 			}
 		}
 
+		// Draw slider handle for Projection plane dimensions
 		private static Vector3 SliderHandleLocalOffset(int controlId, Transform transform, Vector3 localPosition, Vector3 direction)
 		{
 			Vector3 worldPos = transform.TransformPoint(localPosition);

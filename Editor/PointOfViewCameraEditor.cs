@@ -3,15 +3,16 @@ using UnityEngine;
 
 namespace CFaz.OffAxisCamera.Editor
 {
-	[CustomEditor(typeof(PointOfViewCamera))]
+	[CustomEditor(typeof(PointOfViewCamera), true)]
 	public class PointOfViewCameraEditor : UnityEditor.Editor
 	{
 		private PointOfViewCamera CameraTarget => (PointOfViewCamera)target;
 
 		public override void OnInspectorGUI()
 		{
-			EditorGUI.BeginChangeCheck();
 			serializedObject.UpdateIfRequiredOrScript();
+
+			// Get property iterator and enter it
 			SerializedProperty iterator = serializedObject.GetIterator();
 			iterator.NextVisible(true);
 
@@ -24,26 +25,26 @@ namespace CFaz.OffAxisCamera.Editor
 			{
 				switch (iterator.propertyPath)
 				{
+					// ignore script property
 					case "m_Script":
 						continue;
 				}
-
 				EditorGUILayout.PropertyField(iterator, true);
 			}
 			while (iterator.NextVisible(false));
 
 			serializedObject.ApplyModifiedProperties();
-			EditorGUI.EndChangeCheck();
 		}
 
-		private void OnSceneGUI()
+		public virtual void OnSceneGUI()
 		{
 			Rect rect = CameraTarget.PlaneRect;
 
-			Vector3 bl = CameraTarget.transform.TransformPoint(new Vector2(rect.xMin, rect.yMin));
-			Vector3 br = CameraTarget.transform.TransformPoint(new Vector2(rect.xMax, rect.yMin));
+			Vector3 tr = CameraTarget.transform.TransformPoint(rect.max);
 			Vector3 tl = CameraTarget.transform.TransformPoint(new Vector2(rect.xMin, rect.yMax));
-			Vector3 tr = CameraTarget.transform.TransformPoint(new Vector2(rect.xMax, rect.yMax));
+			Vector3 br = CameraTarget.transform.TransformPoint(new Vector2(rect.xMax, rect.yMin));
+			Vector3 bl = CameraTarget.transform.TransformPoint(rect.min);
+			Vector3 povWorld = CameraTarget.transform.TransformPoint(CameraTarget.PointOfViewLocal);
 
 			// Draw projection plane
 			Handles.color = Color.white;
@@ -52,9 +53,7 @@ namespace CFaz.OffAxisCamera.Editor
 			Handles.DrawLine(br, tr);
 			Handles.DrawLine(br, bl);
 
-			Vector3 povWorld = CameraTarget.transform.TransformPoint(CameraTarget.PointOfViewLocal);
-
-			//Handles.Draws(povWorld, 0.01f);
+			// Draws dotted line from the POV to the plane corners
 			Handles.color = Color.gray;
 			Handles.DrawDottedLine(povWorld, tr, 1);
 			Handles.DrawDottedLine(povWorld, tl, 1);
